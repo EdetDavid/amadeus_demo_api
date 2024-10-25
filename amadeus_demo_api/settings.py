@@ -26,6 +26,7 @@ DEBUG = env('DEBUG')
 ALLOWED_HOSTS = ['*']
 AMADEUS_CLIENT_ID = env('AMADEUS_CLIENT_ID')
 AMADEUS_CLIENT_SECRET = env('AMADEUS_CLIENT_SECRET')
+AMADEUS_HOSTNAME = os.environ.get('AMADEUS_HOSTNAME', 'test')  # Default to 'test'
 
 
 # Application definition
@@ -39,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     "widget_tweaks",
     'demo',
-    #'hotel',
+    'hotel',
 ]
 
 MIDDLEWARE = [
@@ -61,6 +62,7 @@ TEMPLATE_DIRS = (
 )
 
 AUTH_USER_MODEL = 'demo.User'  # Custom user model
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # AWS Credentials and SES Configurationbefore i used this guy

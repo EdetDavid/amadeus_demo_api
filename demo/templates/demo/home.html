@@ -4,39 +4,24 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <title>Seplat Booking - Your Next Adventure Awaits</title>
-    <link rel="icon" href="{% static 'images/seplat.png' %}" type="image/x-icon">
-
+    <link rel="icon"
+          href="{% static 'images/seplat.png' %}"
+          type="image/x-icon">
     <!-- Bootstrap CSS -->
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-    />
-
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
     <!-- Font Awesome for Icons -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-    />
-
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <!-- jQuery UI CSS (for Autocomplete) -->
-    <link
-      rel="stylesheet"
-      href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css"
-    />
-
+    <link rel="stylesheet"
+          href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css" />
     <!-- Custom CSS -->
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{% static 'demo/style.css' %}"
-    />
-
-<style>
+    <link rel="stylesheet" type="text/css" href="{% static 'demo/style.css' %}" />
+    <style>
       /* Custom Styles */
       body {
         font-family: "Arial", sans-serif;
@@ -65,6 +50,12 @@
       .card {
         border-radius: 10px;
       }
+
+      #inputOrigin,
+      #inputDestination {
+    text-transform: uppercase;
+} 
+
 
       .btn-primary {
         background-color: #007bff;
@@ -237,7 +228,7 @@
   border: none !important;
 }
     </style>
-<script>
+    <script>
   function checkAuth(event) {
     // Check if user is authenticated
     var isAuthenticated = "{{ user.is_authenticated }}";
@@ -256,19 +247,22 @@
       }, 2000); // 2-second delay before redirect
     }
   }
-</script>
-
+    </script>
   </head>
   <body>
     <!-- Navigation -->
-  
-
     <nav class="navbar navbar-expand-lg fixed-top">
-      <a class="navbar-brand" href="{% url 'home' %}"> 
-        <img src="{% static 'images/seplat.png' %}" width="40" height="40" alt="Seplat Logo" />
+      <a class="navbar-brand" href="{% url 'home' %}">
+        <img src="{% static 'images/seplat.png' %}"
+             width="40"
+             height="40"
+             alt="Seplat Logo" />
         Seplat Booking
       </a>
-      <button class="navbar-toggler " type="button" data-toggle="collapse" data-target="#navbarNav">
+      <button class="navbar-toggler "
+              type="button"
+              data-toggle="collapse"
+              data-target="#navbarNav">
         <span class="navbar-toggler-icon">
           <i class="fas fa-bars text-dark"> </i>
         </span>
@@ -284,58 +278,51 @@
           <li class="nav-item">
             <a class="nav-link" href="#">Hotels</a>
           </li>
-  
-
-
-      
           <li class="nav-item">
-            <a class="nav-link" href="#" data-toggle="modal" data-target="#cartModal">
+            <a class="nav-link"
+               href="#"
+               data-toggle="modal"
+               data-target="#cartModal">
               <i class="fas fa-shopping-cart"></i>
             </a>
           </li>
         </ul>
-    
         <!-- Login Button or Username Display -->
         <ul class="navbar-nav ml-auto">
           {% if user.is_authenticated %}
-          <li class="nav-item dropdown">
-            <a class="nav-link username-text dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Signed in as: {{ user.username }}
-            </a>
-            <div class="dropdown-menu dropdown-menu-right username-dropdown" aria-labelledby="userDropdown">
-              
-
-        <a class="dropdown-item" href="{% get_profile_url user %}">Profile</a>
-
-              <a class="dropdown-item" href="{% url 'logout'  %} ">Logout</a> 
-            </div>
-          </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link username-text dropdown-toggle"
+                 href="#"
+                 id="userDropdown"
+                 role="button"
+                 data-toggle="dropdown"
+                 aria-haspopup="true"
+                 aria-expanded="false">Signed in as: {{ user.username }}</a>
+              <div class="dropdown-menu dropdown-menu-right username-dropdown"
+                   aria-labelledby="userDropdown">
+                <a class="dropdown-item" href="{% get_profile_url user %}">Profile</a>
+                <a class="dropdown-item" href="{% url 'logout' %} ">Logout</a>
+              </div>
+            </li>
           {% else %}
-          <li class="nav-item">
-            <a class="btn login-btn" href="{% url 'login' %}">Login</a>
-          </li>
+            <li class="nav-item">
+              <a class="btn login-btn" href="{% url 'login' %}">Login</a>
+            </li>
           {% endif %}
         </ul>
       </div>
     </nav>
     <!-- Cart Modal -->
-    <div
-      class="modal fade"
-      id="cartModal"
-      tabindex="-1"
-      aria-labelledby="cartModalLabel"
-      aria-hidden="true"
-    >
+    <div class="modal fade"
+         id="cartModal"
+         tabindex="-1"
+         aria-labelledby="cartModalLabel"
+         aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="cartModalLabel">Your Cart</h5>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -343,25 +330,19 @@
             <p>Your cart is currently empty.</p>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary" data-dismiss="modal">
-              Continue Shopping
-            </button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Continue Shopping</button>
             <button type="button" class="btn btn-primary">Checkout</button>
           </div>
         </div>
       </div>
     </div>
-
     <!-- Hero Section -->
     <section class="hero-section">
       <div class="container">
         <h1 class="display-4">Discover Your Next Destination</h1>
-        <p class="lead">
-          Book flights, hotels, and car rentals all in one place.
-        </p>
+        <p class="lead">Book flights, hotels, and car rentals all in one place.</p>
       </div>
     </section>
-
     <!-- Search Section -->
     <section id="search" class="search-section">
       <div class="container">
@@ -372,104 +353,82 @@
                 <h2 class="text-center mb-4">Where would you like to go?</h2>
                 <form action="" method="POST" id="form_id" onsubmit="checkAuth(event)">
                   {% csrf_token %}
-                  
-                  <div id="authMessage" style="display: none; text-align: center; color: red; font-size: 16px; background-color: #f8d7da; padding: 10px; border-radius: 5px; margin-top: 10px;">
+                  <div id="authMessage"
+                       style="display: none;
+                              text-align: center;
+                              color: red;
+                              font-size: 16px;
+                              background-color: #f8d7da;
+                              padding: 10px;
+                              border-radius: 5px;
+                              margin-top: 10px">
                     You need to log in to submit the form. Redirecting to login page...
                   </div>
-                  
                   {% if messages %}
-                  <div class="error-message"> 
-                    <ul>
-                      {% for message in messages %}
-                        <li>{{ message }}</li>
-                      {% endfor %}
-                    </ul>
-                  </div>
-                {% endif %}
-                
+                    <div class="error-message">
+                      <ul>
+                        {% for message in messages %}<li>{{ message }}</li>{% endfor %}
+                      </ul>
+                    </div>
+                  {% endif %}
                   <div class="form-row">
                     <div class="form-group col-md-6">
                       <label for="inputOrigin">From</label>
-                      <input
-                        type="text"
-                        name="Origin"
-                        id="inputOrigin"
-                        class="form-control"
-                        placeholder="Enter city or airport"
-                        required
-                        autofocus
-                      />
+                      <input type="text"
+                             name="Origin"
+                             id="inputOrigin"
+                             class="form-control"
+                             placeholder="Enter city or airport"
+                             required
+                             autofocus />
                     </div>
                     <div class="form-group col-md-6">
                       <label for="inputDestination">To</label>
-                      <input
-                        type="text"
-                        name="Destination"
-                        id="inputDestination"
-                        class="form-control"
-                        placeholder="Enter city or airport"
-                        required
-                      />
+                      <input type="text"
+                             name="Destination"
+                             id="inputDestination"
+                             class="form-control"
+                             placeholder="Enter city or airport"
+                             required />
                     </div>
                   </div>
                   <div class="form-row">
                     <div class="form-group col-md-3">
                       <label for="idDeparturedate">Departure Date</label>
-                      <input
-                        type="date"
-                        name="Departuredate"
-                        id="idDeparturedate"
-                        class="form-control"
-                        required
-                      />
+                      <input type="date"
+                             name="Departuredate"
+                             id="idDeparturedate"
+                             class="form-control"
+                             required />
                     </div>
                     <div class="form-group col-md-3">
                       <label for="idReturndate">Return Date</label>
-                      <input
-                        type="date"
-                        name="Returndate"
-                        id="idReturndate"
-                        class="form-control"
-                      />
+                      <input type="date" name="Returndate" id="idReturndate" class="form-control" />
                     </div>
                     <div class="form-group col-md-2">
                       <label for="passengerCount">Passengers</label>
                       <div class="input-group">
                         <div class="input-group-prepend">
-                          <button
-                            class="btn btn-outline-secondary"
-                            type="button"
-                            id="decreasePassengers"
-                          >
-                            -
-                          </button>
+                          <button class="btn btn-outline-secondary"
+                                  type="button"
+                                  id="decreasePassengers">-</button>
                         </div>
-                        <input
-                          type="number"
-                          class="form-control"
-                          id="passengerCount"
-                          name="passengerCount"
-                          value="1"
-                          min="1"
-                        />
+                        <input type="number"
+                               class="form-control"
+                               id="passengerCount"
+                               name="passengerCount"
+                               value="1"
+                               min="1" />
                         <div class="input-group-append">
-                          <button
-                            class="btn btn-outline-secondary"
-                            type="button"
-                            id="increasePassengers"
-                          >
-                            +
-                          </button>
+                          <button class="btn btn-outline-secondary"
+                                  type="button"
+                                  id="increasePassengers">+</button>
                         </div>
                       </div>
                     </div>
                     <div class="form-group col-md-4">
                       <label for="cabinClass">Cabin Class</label>
-                      <select
-                        class="form-control"
-                        id="cabinClass"
-                        name="cabinClass"
-                      >
+                      <select class="form-control" id="cabinClass" name="cabinClass">
                         <option value="economy">Economy</option>
                         <option value="premium_economy">Premium Economy</option>
                         <option value="business">Business</option>
@@ -480,11 +439,7 @@
                   <div class="form-row">
                     <div class="form-group col-md-3">
                       <label for="tripType">Trip Type</label>
-                      <select
-                        class="form-control"
-                        id="tripType"
-                        name="tripType"
-                      >
+                      <select class="form-control" id="tripType" name="tripType">
                         <option value="one-way">One-Way</option>
                         <option value="round-trip" selected>Round-Trip</option>
                         <option value="multi-city">Multi-City</option>
@@ -504,7 +459,6 @@
         </div>
       </div>
     </section>
-
     <!-- Popular Destinations -->
     <section class="py-5">
       <div class="container">
@@ -512,11 +466,9 @@
         <div class="row">
           <div class="col-md-4">
             <div class="card mb-4">
-              <img
-                src="{% static 'images/paris.webp' %}"
-                class="card-img-top"
-                alt="Paris, France"
-              />
+              <img src="{% static 'images/paris.webp' %}"
+                   class="card-img-top"
+                   alt="Paris, France" />
               <div class="card-body">
                 <h5 class="card-title">Paris, France</h5>
                 <p class="card-text">Discover the city of love and lights.</p>
@@ -526,27 +478,21 @@
           </div>
           <div class="col-md-4">
             <div class="card mb-4">
-              <img
-                src="{% static 'images/tokyo.webp' %}"
-                class="card-img-top"
-                alt="Tokyo, Japan"
-              />
+              <img src="{% static 'images/tokyo.webp' %}"
+                   class="card-img-top"
+                   alt="Tokyo, Japan" />
               <div class="card-body">
                 <h5 class="card-title">Tokyo, Japan</h5>
-                <p class="card-text">
-                  Experience the perfect blend of tradition and technology.
-                </p>
+                <p class="card-text">Experience the perfect blend of tradition and technology.</p>
                 <a href="#search" class="btn btn-primary">Book Now</a>
               </div>
             </div>
           </div>
           <div class="col-md-4">
             <div class="card mb-4">
-              <img
-                src="{% static 'images/new_york.webp' %}"
-                class="card-img-top"
-                alt="New York, USA"
-              />
+              <img src="{% static 'images/new_york.webp' %}"
+                   class="card-img-top"
+                   alt="New York, USA" />
               <div class="card-body">
                 <h5 class="card-title">New York, USA</h5>
                 <p class="card-text">Explore the city that never sleeps.</p>
@@ -557,24 +503,21 @@
         </div>
       </div>
     </section>
-
     <!-- Footer -->
     <footer class="footer">
       <div class="container text-center">
         <p>&copy; 2024 Seplat Booking. All rights reserved.</p>
-        <p><a href="{% url 'update_price_increment' %}">Terms of Service</a> | <a href="#">Privacy Policy</a></p> 
+        <p>
+          <a href="{% url 'update_price_increment' %}">Terms of Service</a> | <a href="#">Privacy Policy</a>
+        </p>
       </div>
     </footer>
-
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
     <!-- jQuery UI (for Autocomplete) -->
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
-
     <!-- Bootstrap JS -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-
     <script>
       $(document).ready(function () {
   

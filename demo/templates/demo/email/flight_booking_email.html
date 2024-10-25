@@ -153,73 +153,75 @@
                     <strong>Travel Class:</strong> {{ travel_class }}
                 </li>
             </ul>
-            <h2>Booking Details:</h2>
-            <div class="booking-details">
-                {% for r in response %}
-                    <h3>Your Booking Confirmation</h3>
-                    <div class="card">
-                        <div class="card-header">Booking Information</div>
-                        <div class="card-body">
-                            <p>
-                                Status: <span class="text-danger">{{ r.confirmed }}</span>
-                            </p>
-                            <p>
-                                Booking Reference: <span class="text-danger">{{ r.reference }}</span>
-                            </p>
-                            <p>
-                                Document Issued At: <b>{{ r.created }}</b>
-                            </p>
-                            <p>
-                                Price: <span class="price">${{ r.price }}</span>
-                            </p>
-                            {% if r.0firstFlightDepartureDate %}
-                                <div class="card">
-                                    <div class="card-header">Departure Flight</div>
-                                    <div class="card-body">
-                                        <p>Departure Date: {{ r.0departureDate }}</p>
-                                        <div class="card-text">
-                                            <h4>
-                                                <img src="{{ r.0firstFlightAirlineLogo }}"
-                                                     alt="{{ r.0firstFlightAirline }}">
-                                                {{ r.0firstFlightDepartureDate }} {{ r.0firstFlightDepartureAirport }}
-                                                &#10230; {{ r.0firstFlightArrivalAirport }} {{ r.0firstFlightArrivalDate }}
-                                            </h4>
-                                            {% if r.0secondFlightDepartureAirport %}
-                                                <h4>
-                                                    <img src="{{ r.0secondFlightAirlineLogo }}"
-                                                         alt="{{ r.0secondFlightAirline }}">
-                                                    {{ r.0secondFlightDepartureDate }} {{ r.0secondFlightDepartureAirport }}
-                                                    &#10230; {{ r.0secondFlightArrivalAirport }} {{ r.0secondFlightArrivalDate }}
-                                                </h4>
-                                            {% endif %}
-                                        </div>
-                                        {% if r.1firstFlightDepartureAirport %}
-                                            <hr class="hr-style">
-                                            <p>Return Flight Date: {{ r.1departureDate }}</p>
+            {% if response %}
+                <h2>Booking Details:</h2>
+                <div class="booking-details">
+                    {% for r in response %}
+                        <h3>Your Booking Confirmation</h3>
+                        <div class="card">
+                            <div class="card-header">Booking Information</div>
+                            <div class="card-body">
+                                <p>
+                                    Status: <span class="text-danger">{{ r.confirmed }}</span>
+                                </p>
+                                <p>
+                                    Booking Reference: <span class="text-danger">{{ r.reference }}</span>
+                                </p>
+                                <p>
+                                    Document Issued At: <b>{{ r.created }}</b>
+                                </p>
+                                <p>
+                                    Price: <span class="price">${{ r.price }}</span>
+                                </p>
+                                {% if r.0firstFlightDepartureDate %}
+                                    <div class="card">
+                                        <div class="card-header">Departure Flight</div>
+                                        <div class="card-body">
+                                            <p>Departure Date: {{ r.0departureDate }}</p>
                                             <div class="card-text">
                                                 <h4>
-                                                    <img src="{{ r.1firstFlightAirlineLogo }}"
-                                                         alt="{{ r.1firstFlightAirline }}">
-                                                    {{ r.1firstFlightDepartureDate }} {{ r.1firstFlightDepartureAirport }}
-                                                    &#10230; {{ r.1firstFlightArrivalAirport }} {{ r.1firstFlightArrivalDate }}
+                                                    <img src="{{ r.0firstFlightAirlineLogo }}"
+                                                         alt="{{ r.0firstFlightAirline }}">
+                                                    {{ r.0firstFlightDepartureDate }} {{ r.0firstFlightDepartureAirport }}
+                                                    &#10230; {{ r.0firstFlightArrivalAirport }} {{ r.0firstFlightArrivalDate }}
                                                 </h4>
-                                                {% if r.1secondFlightDepartureAirport %}
+                                                {% if r.0secondFlightDepartureAirport %}
                                                     <h4>
-                                                        <img src="{{ r.1secondFlightAirlineLogo }}"
-                                                             alt="{{ r.1secondFlightAirline }}">
-                                                        {{ r.1secondFlightDepartureDate }} {{ r.1secondFlightDepartureAirport }}
-                                                        &#10230; {{ r.1secondFlightArrivalAirport }} {{ r.1secondFlightArrivalDate }}
+                                                        <img src="{{ r.0secondFlightAirlineLogo }}"
+                                                             alt="{{ r.0secondFlightAirline }}">
+                                                        {{ r.0secondFlightDepartureDate }} {{ r.0secondFlightDepartureAirport }}
+                                                        &#10230; {{ r.0secondFlightArrivalAirport }} {{ r.0secondFlightArrivalDate }}
                                                     </h4>
                                                 {% endif %}
                                             </div>
-                                        {% endif %}
+                                            {% if r.1firstFlightDepartureAirport %}
+                                                <hr class="hr-style">
+                                                <p>Return Flight Date: {{ r.1departureDate }}</p>
+                                                <div class="card-text">
+                                                    <h4>
+                                                        <img src="{{ r.1firstFlightAirlineLogo }}"
+                                                             alt="{{ r.1firstFlightAirline }}">
+                                                        {{ r.1firstFlightDepartureDate }} {{ r.1firstFlightDepartureAirport }}
+                                                        &#10230; {{ r.1firstFlightArrivalAirport }} {{ r.1firstFlightArrivalDate }}
+                                                    </h4>
+                                                    {% if r.1secondFlightDepartureAirport %}
+                                                        <h4>
+                                                            <img src="{{ r.1secondFlightAirlineLogo }}"
+                                                                 alt="{{ r.1secondFlightAirline }}">
+                                                            {{ r.1secondFlightDepartureDate }} {{ r.1secondFlightDepartureAirport }}
+                                                            &#10230; {{ r.1secondFlightArrivalAirport }} {{ r.1secondFlightArrivalDate }}
+                                                        </h4>
+                                                    {% endif %}
+                                                </div>
+                                            {% endif %}
+                                        </div>
                                     </div>
-                                </div>
-                            {% endif %}
+                                {% endif %}
+                            </div>
                         </div>
-                    </div>
-                {% endfor %}
-            </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
             <p>Thank you for choosing our service. Have a great trip!</p>
             <div class="signature">
                 <p>
