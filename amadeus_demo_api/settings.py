@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     "widget_tweaks",
     'demo',
-    'hotel',
+    # 'hotel',
 ]
 
 MIDDLEWARE = [
