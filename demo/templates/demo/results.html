@@ -205,9 +205,15 @@
                                         <td class="text-right">
                                             <span class="price">₦{{ r.price|floatformat:0|intcomma }}</span>
                                         </td>
+                                        {% comment %} <td class="text-center text-center-vertical">
+                                            <a href="{% url 'book_flight' flight %}" class="book-button btn text-decoration-none">Book Flight</a>
+                                        </td> {% endcomment %}
                                         <td class="text-center text-center-vertical">
-                                            <a href="{% url 'book_flight' flight %}"
-                                               class="book-button btn text-decoration-none">Book Flight</a>
+                                            <form method="POST" action="{% url 'book_flight' %}">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="flight_data" value="{{ flight }}">
+                                                <button type="submit" class="book-button btn text-decoration-none">Book Flight</button>
+                                            </form>
                                         </td>
                                     </tr>
                                 {% endif %}

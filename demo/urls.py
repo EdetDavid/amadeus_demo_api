@@ -8,7 +8,7 @@ urlpatterns = [
          name='origin_airport_search'),
     path('destination_airport_search/', views.destination_airport_search,
          name='destination_airport_search'),
-    path('book_flight/<str:flight>/', views.book_flight, name='book_flight'),
+    path('book_flight/', views.book_flight, name='book_flight'),
     path('register/', views.staff_register, name='register'),
     path('login/', views.staff_login, name='login'),
     path('logout/', views.logout_view, name='logout'),
