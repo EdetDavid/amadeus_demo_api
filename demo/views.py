@@ -600,178 +600,18 @@ def get_access_token():
         raise Exception(f"Failed to get access token: {str(e)}")
 
 
-# def book_flight(request, flight):
-#     try:
-#         # Parse flight data
-#         flight_data = ast.literal_eval(flight)
-#         print(f"Processing flight data: {flight_data}")
+def book_flight(request):
+    if request.method != 'POST':
+        messages.error(request, "Invalid request method")
+        return redirect('home')
 
-#         # Extract flight details from the flight data
-#         origin = flight_data['itineraries'][0]['segments'][0]['departure']['iataCode']
-#         destination = flight_data['itineraries'][0]['segments'][-1]['arrival']['iataCode']
-#         departure_date = flight_data['itineraries'][0]['segments'][0]['departure']['at'].split('T')[
-#             0]
-#         return_date = flight_data['itineraries'][-1]['segments'][-1]['arrival']['at'].split(
-#             'T')[0] if len(flight_data['itineraries']) > 1 else None
-#         passenger_count = len(flight_data['travelerPricings'])
-#         travel_class = flight_data['travelerPricings'][0]['fareDetailsBySegment'][0]['cabin']
-#         price = float(flight_data['price']['total'])
-
-#         # Multiply the price by 1600
-#         price_in_local_currency = price * 1600
-
-#         # Check if the flight already exists
-#         existing_flight = Flight_model.objects.filter(
-#             user=request.user,
-#             origin=origin,
-#             destination=destination,
-#             departure_date=departure_date,
-#             return_date=return_date if return_date else None,
-#             passenger_count=passenger_count,
-#             travel_class=travel_class,
-#             price=price_in_local_currency
-#         ).first()
-
-#         # If the flight doesn't exist, create it
-#         if not existing_flight:
-#             Flight_model.objects.create(
-#                 user=request.user,
-#                 origin=origin,
-#                 destination=destination,
-#                 departure_date=departure_date,
-#                 return_date=return_date if return_date else None,
-#                 passenger_count=passenger_count,
-#                 travel_class=travel_class,
-#                 price=price_in_local_currency
-#             )
-
-#         print(f"Extracted flight details: departure_date={departure_date}, return_date={return_date}, "
-#               f"passenger_count={passenger_count}, travel_class={travel_class}, "
-#               f"origin={origin}, destination={destination}")
-
-#         # Find approved flights for any user matching the criteria
-#         approved_flights = Flight_model.objects.filter(
-#             origin=origin,
-#             destination=destination,
-#             departure_date=departure_date,
-#             return_date=return_date,
-#             passenger_count=passenger_count,
-#             travel_class__iexact=travel_class,
-#             approved=True
-#         )
-
-#         if approved_flights:
-#             for approved_flight in approved_flights:
-#                 user = approved_flight.user
-
-#                 # Proceed with booking logic using the current user data
-#                 try:
-#                     with transaction.atomic():
-#                         # Get access token
-#                         token = get_access_token()
-#                         headers = {
-#                             'Authorization': f'Bearer {token}',
-#                             'Content-Type': 'application/json'
-#                         }
-
-#                         # Prepare traveler information
-#                         traveler = {
-#                             "id": "1",
-#                             "dateOfBirth": "1982-01-16",
-#                             "name": {"firstName": "JORGE", "lastName": "GONZALES"},
-#                             "gender": "MALE",
-#                             "contact": {
-#                                 "emailAddress": "jorge.gonzales833@telefonica.es",
-#                                 "phones": [{"deviceType": "MOBILE", "countryCallingCode": "34", "number": "480080076"}],
-#                             },
-#                             "documents": [{
-#                                 "documentType": "PASSPORT",
-#                                 "birthPlace": "Madrid",
-#                                 "issuanceLocation": "Madrid",
-#                                 "issuanceDate": "2015-04-14",
-#                                 "number": "00000000",
-#                                 "expiryDate": "2025-04-14",
-#                                 "issuanceCountry": "ES",
-#                                 "validityCountry": "ES",
-#                                 "nationality": "ES",
-#                                 "holder": True,
-#                             }],
-#                         }
-
-#                         # Confirm flight pricing with Amadeus API
-#                         flight_price_confirmed = amadeus.shopping.flight_offers.pricing.post(
-#                             flight_data).data["flightOffers"]
-
-#                         if settings.AMADEUS_HOSTNAME == 'production':
-#                             booking_api_endpoint = "https://api.amadeus.com/v1/booking/flight-orders"
-#                         else:
-#                             booking_api_endpoint = "https://test.api.amadeus.com/v1/booking/flight-orders"
-
-#                         # Make booking via Amadeus API
-#                         response = requests.post(
-#                             booking_api_endpoint,
-#                             headers=headers,
-#                             json={"data": {
-#                                 "type": "flight-order", "flightOffers": flight_price_confirmed, "travelers": [traveler]}}
-#                         )
-#                         response.raise_for_status()
-
-#                         order = response.json()["data"]
-#                         passenger_name_record = [
-#                             Booking(order).construct_booking()]
-
-#                         # Send confirmation email to the user
-#                         send_flight_email(
-#                             user,  # Correct user from the loop
-#                             origin,
-#                             destination,
-#                             departure_date,
-#                             return_date,
-#                             passenger_name_record
-#                         )
-
-#                         return render(request, "demo/book_flight.html", {"response": passenger_name_record})
-
-#                 except Exception as booking_error:
-#                     logger.error(
-#                         f"Error booking flight for user {user.username}: {booking_error}")
-#                     messages.success(
-#                         request, f"Flight Booked {user.username}. Please check your mails.")
-#                     send_flight_email_2(user, origin, destination, departure_date,
-#                                         return_date)
-                    
-#                     return render(request, "demo/success_page.html")
-
-
-#         else:
-#             logger.warning("No approved flights found")
-#             messages.error(request, "Your flight hasn't been approved yet.")
-
-#             # Send email notification about pending approval
-#             send_flight_pending_email(
-#                 user=request.user,  # Current user requesting booking
-#                 origin=origin,
-#                 destination=destination,
-#                 departure_date=departure_date,
-#                 return_date=return_date,
-#                 passenger_count=passenger_count,
-#                 price=price_in_local_currency
-#             )
-
-#     except requests.exceptions.HTTPError as http_err:
-#         logger.error(f"HTTP error occurred: {http_err}")
-#         messages.error(request, f"Booking failed: {str(http_err)}")
-#     except Exception as error:
-#         logger.exception(f"An unexpected error occurred: {error}")
-#         messages.error(request, f"An error occurred: {str(error)}")
-
-#     return redirect('home')
-
-
-
-
-def book_flight(request, flight):
     try:
+        # Get flight data from POST
+        flight = request.POST.get('flight_data')
+        if not flight:
+            messages.error(request, "No flight data provided")
+            return redirect('home')
+
         # Parse flight data
         flight_data = ast.literal_eval(flight)
         print(f"Processing flight data: {flight_data}")
@@ -779,8 +619,10 @@ def book_flight(request, flight):
         # Extract flight details from the flight data
         origin = flight_data['itineraries'][0]['segments'][0]['departure']['iataCode']
         destination = flight_data['itineraries'][0]['segments'][-1]['arrival']['iataCode']
-        departure_date = flight_data['itineraries'][0]['segments'][0]['departure']['at'].split('T')[0]
-        return_date = flight_data['itineraries'][-1]['segments'][-1]['arrival']['at'].split('T')[0] if len(flight_data['itineraries']) > 1 else None
+        departure_date = flight_data['itineraries'][0]['segments'][0]['departure']['at'].split('T')[
+            0]
+        return_date = flight_data['itineraries'][-1]['segments'][-1]['arrival']['at'].split(
+            'T')[0] if len(flight_data['itineraries']) > 1 else None
         passenger_count = len(flight_data['travelerPricings'])
         travel_class = flight_data['travelerPricings'][0]['fareDetailsBySegment'][0]['cabin']
         price = float(flight_data['price']['total'])
@@ -825,6 +667,7 @@ def book_flight(request, flight):
             return_date=return_date,
             passenger_count=passenger_count,
             travel_class__iexact=travel_class,
+            price=price_in_local_currency,
             approved=True
         )
 
@@ -899,7 +742,7 @@ def book_flight(request, flight):
                         )
 
                         # Render the success page
-                        return render(request, "demo/success_page.html", {"user": user})
+                        return render(request, "demo/book_flight.html", {"response": passenger_name_record})
 
                 except Exception as booking_error:
                     logger.error(
