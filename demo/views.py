@@ -509,6 +509,7 @@ def update_price_increment(request):
     return render(request, 'demo/thrive_admin/update_price.html', {'increment_value': increment.increment_value})
 
 
+
 def demo(request):
     user = request.user
     origin = request.POST.get("Origin")
@@ -559,6 +560,10 @@ def demo(request):
             search_flights_returned.append(offer)
 
         response = zip(search_flights_returned, search_flights.data)
+        # Check if the response is empty and pass a message to the template
+        if not search_flights_returned:
+            messages.info(request, "No flight itinerary for this route.")
+            return redirect('home')
 
         return render(
             request,
