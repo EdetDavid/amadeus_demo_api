@@ -64,12 +64,56 @@
         .sidebar a:hover,
         .sidebar a.active {
             background-color: #2c3e50;
-            border-left: 4px solid #3498db;
         }
 
         .sidebar a i {
             margin-right: 15px;
             font-size: 18px;
+        }
+
+        /* Dropdown styles */
+        .dropdown {
+            position: relative;
+            display: block;
+        }
+
+        .dropdown-toggle {
+            color: #ecf0f1;
+            padding: 15px 25px;
+            text-decoration: none;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+
+        .dropdown-toggle:hover {
+            background-color: #2c3e50;
+        }
+
+        .dropdown-toggle i {
+            margin-right: 15px;
+            font-size: 18px;
+        }
+
+        .dropdown-content {
+            display: none;
+            background-color: #1a2942;
+        }
+
+        .dropdown-content a {
+            padding: 15px 25px 15px 55px;
+            margin-bottom: 0;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #2c3e50;
+        }
+
+        .dropdown.active .dropdown-content {
+            display: block;
         }
 
         .main-content {
@@ -195,25 +239,42 @@
         <!-- Sidebar Section -->
         <div class="sidebar">
             <h2>Admin Dashboard</h2>
-            <a href="{% url 'admin_profile' %}" class="{% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
-                <i class="fas fa-user-circle"></i> <span>Profile</span>
+            <a class="my-2 text-decoration-none" href="{% url 'admin_profile' %}" class="{% if request.resolver_match.url_name == 'admin_profile' %}active{% endif %}">
+                <i class="fas fa-user-circle"></i>Profile
             </a>
-            <a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">
-                <i class="fas fa-plane"></i> <span>Book Now</span>
+            
+            <!-- Dropdown Menu -->
+            <div class="dropdown">
+                <div class="dropdown-toggle">
+                    <i class="fas fa-plane"></i>
+                    <span>Book Now</span>
+                </div>
+                <div class="dropdown-content">
+                    <a class="text-decoration-none" href="{% url 'home' %}">
+                        <i class="fas fa-plane-departure"></i>
+                        Flight
+                    </a>
+                    <a class="text-decoration-none" href="{% url 'hotel' %}">
+                        <i class="fas fa-hotel"></i>
+                        Hotel
+                    </a>
+                </div>
+            </div>
+
+            <a class="my-2 text-decoration-none" href="{% url 'admin_approval_view' %}" class="{% if request.resolver_match.url_name == 'admin_approval_view' %}active{% endif %}">
+                <i class="fas fa-check-circle"></i>Approve Admin
             </a>
-            <a href="{% url 'admin_approval_view' %}" class="{% if request.resolver_match.url_name == 'admin_approval_view' %}active{% endif %}">
-                <i class="fas fa-check-circle"></i> <span>Approve Admin</span>
+            <a class="my-2 text-decoration-none" href="{% url 'approve_flight' %}" class="{% if request.resolver_match.url_name == 'approve_flight' %}active{% endif %}">
+                <i class="fas fa-check-circle"></i>Approve Flight
             </a>
-            <a href="{% url 'approve_flight' %}" class="{% if request.resolver_match.url_name == 'approve_flight' %}active{% endif %}">
-                <i class="fas fa-check-circle"></i> <span>Approve Flight</span>
+            <a class="my-2 text-decoration-none" href="{% url 'staff_list' %}" class="{% if request.resolver_match.url_name == 'staff_list' %}active{% endif %}">
+                <i class="fas fa-users"></i>Staffs
             </a>
-            <a href="{% url 'staff_list' %}" class="{% if request.resolver_match.url_name == 'staffs' %}active{% endif %}">
-                <i class="fas fa-users"></i> <span>Staffs</span>
-            </a>
-            <a href="{% url 'report' %}" class="{% if request.resolver_match.url_name == 'report' %}active{% endif %}">
-                <i class="fas fa-chart-line"></i> <span>Reports</span>
+            <a class="my-2 text-decoration-none" href="{% url 'report' %}" class="{% if request.resolver_match.url_name == 'report' %}active{% endif %}">
+                <i class="fas fa-chart-line"></i>Reports
             </a>
         </div>
+
         <!-- Main Content Section -->
         <div class="main-content">
             <!-- Sidebar Toggle Button -->
@@ -233,10 +294,20 @@
             </div>
         </div>
     </div>
+
     <script>
         const sidebar = document.querySelector('.sidebar');
         const sidebarToggle = document.querySelector('.sidebar-toggle');
         const mainContainer = document.querySelector('.main-container');
+
+        // Dropdown functionality
+        document.querySelectorAll('.dropdown-toggle').forEach(dropdownToggle => {
+            dropdownToggle.addEventListener('click', (e) => {
+                e.preventDefault();
+                const dropdown = dropdownToggle.parentElement;
+                dropdown.classList.toggle('active');
+            });
+        });
 
         sidebarToggle.addEventListener('click', () => {
             sidebar.classList.toggle('open');
@@ -265,7 +336,8 @@
         }
 
         window.addEventListener('resize', updateToggleVisibility);
-        updateToggleVisibility(); // Call on page load to set the initial visibility
+        updateToggleVisibility(); 
     </script>
 </body>
 </html>
+

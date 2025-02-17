@@ -46,5 +46,14 @@ urlpatterns = [
     path('update-price/', views.update_price_increment,
          name='update_price_increment'),
 
+    #     Hotel Urls
+
+
+    path('hotel/', views.hotel, name='hotel'),
+    path('city_search/', views.city_search, name='city_search'),
+    path('book_hotel/<str:offer_id>', views.book_hotel, name='book_hotel'),
+    path('rooms_per_hotel/<str:hotel>/<str:departureDate>/<str:returnDate>',
+         views.rooms_per_hotel, name='rooms_per_hotel')
+
 
 ]
